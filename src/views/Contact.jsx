@@ -12,6 +12,11 @@ export const Contact =()=>{
     console.log('LastName:', lastName);
     console.log('Email:', email);
     console.log('Message:', message);
+    
+    alert('Hola ' + name+' '+lastName + ', gracias por ponerte en contacto con nosotros. A la brevedad te estaremos respondiendo.');
+
+     
+
   }
 
   return (

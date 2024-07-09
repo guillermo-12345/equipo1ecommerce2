@@ -46,6 +46,15 @@ const NavBar=()=>{
                     <NavLink className="inactive"  to={"/category/tablet"}>Tablets</NavLink>
                   </NavDropdown>
                   <NavLink className="inactive"  to={"/suppliers"}>Proveedores</NavLink>
+                  <NavDropdown
+                    title="Reportes"
+                    className="drop" 
+                    id={`offcanvasNavbarDropdown-expand-${expand}`}
+                  >
+                    <NavLink className="inactive"  to={"/sales-report"}>Ventas</NavLink>
+                    <NavLink className="inactive" to={"/purchase-report"}>Compras</NavLink>
+                  </NavDropdown>
+                  <NavLink className="inactive" to={"/sales-report"}>Reporte</NavLink>
                   <NavLink className="inactive"  to={"/contact"}>Contacto</NavLink>
                 </Nav>
                 {/* <Form className="d-flex">

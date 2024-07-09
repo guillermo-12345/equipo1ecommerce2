@@ -75,12 +75,7 @@ import { Link } from 'react-router-dom'
 
                 <div className="col-xs-12 col-md-4">
                   <div className="col-md-4 mb-2">
-                    <Link
-                      to="/cart"
-                      className="btn btn-info btn-block "
-                    >
-                      Ver resumen
-                    </Link>
+                    
                   </div>
                 </div>
               </div>

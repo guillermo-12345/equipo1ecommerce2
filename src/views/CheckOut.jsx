@@ -2,6 +2,7 @@ import "../App.css";
 import { useState, useContext } from "react";
 import { CartContext } from "../context/cartContext";
 import CheckoutForm from "../components/CheckoutForm/CheckoutForm";
+import mockSalesData from "../mockSalesData";
 
 const CheckOut = () => {
   const [loading, setLoading] = useState(false);
@@ -14,30 +15,24 @@ const CheckOut = () => {
     setLoading(true);
 
     try {
-      const objOrder = {
-        buyer: {
-          name,
-          phone,
-          email,
-        },
-        items: cart,
-        total: total,
-        date: new Date().toISOString(),
-      };
-
-      // Simulate the order ID generation
-      const orderId = `order_${new Date().getTime()}`;
+      const newOrderNumber = mockSalesData.length > 0 ? mockSalesData[mockSalesData.length - 1].orderNumber + 1 : 1;
+      const orderId = `${newOrderNumber}`;
       setOrderId(orderId);
 
-      // Save order to local storage
-      const orders = JSON.parse(localStorage.getItem('orders')) || [];
-      orders.push({ ...objOrder, id: orderId });
-      localStorage.setItem('orders', JSON.stringify(orders));
+      const newSalesData = cart.map(({ id, title, price, quantity, category }) => ({
+        orderNumber: newOrderNumber,
+        quantity,
+        productName: title,
+        category,
+        date: new Date().toISOString().split('T')[0],
+        customerName: name
+      }));
+
+      mockSalesData.push(...newSalesData);
 
       clearCart();
     } catch (error) {
-      console.log(error);
-      // TODO: Handle error and return feedback to the user
+      console.error("Error al crear la orden", error);
     } finally {
       setLoading(false);
     }
@@ -62,7 +57,7 @@ const CheckOut = () => {
         <h3>Resumen de tu compra</h3>
         {cart.map(({ id, img, title, price, quantity }) => (
           <div key={id}>
-            <p className=" text-uppercase fw-bolder" id="itemName">
+            <p className="text-uppercase fw-bolder" id="itemName">
               {title}
             </p>
             <p>Precio Unitario: ${price}</p>

@@ -8,7 +8,8 @@ import { Contact } from './views/Contact';
 import { Cart } from './views/Cart';
 import CheckOut from './views/CheckOut';
 import SupplierList from './components/SupplierList/SupplierList'; 
-
+import SalesReport from './components/SalesReport/SalesReport';
+import PurchaseReport from './components/PurchaseReport/PurchaseReport';
 function App(){
  
   return (
@@ -23,6 +24,8 @@ function App(){
         <Route path="/cart" element={<Cart/>}/>
         <Route path="/suppliers" element={<SupplierList/>}/>
         <Route path="/checkout" element={<CheckOut/>}/>
+        <Route path="/sales-report" element={<SalesReport/>} />
+        <Route path="/purchase-report" element={<PurchaseReport />} />
         <Route path="*" element={<h1>404 NOT FOUND</h1>}/>
         
       </Routes>

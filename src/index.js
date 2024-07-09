@@ -7,6 +7,8 @@ import 'bootstrap';
 import { BrowserRouter } from 'react-router-dom';
 import { CartProvider } from './context/cartContext';
 
+window.localStorage.removeItem('orders'); 
+
 const rootElement = document.getElementById('root');
 const root = createRoot(rootElement);
 root.render(

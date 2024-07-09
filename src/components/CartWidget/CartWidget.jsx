@@ -13,6 +13,7 @@ const CartWidget = ()=> {
     >
       <><span className="rounded-1 p-1 m-1 bg-body-tertiary">🛒 {totalQuantity}</span></>
     </Link>
+    
   );
 };
 
