@@ -46,6 +46,7 @@ const NavBar=()=>{
                     <NavLink className="inactive"  to={"/category/tablet"}>Tablets</NavLink>
                   </NavDropdown>
                   <NavLink className="inactive"  to={"/suppliers"}>Proveedores</NavLink>
+                  <NavLink className="inactive"  to={"/products"}>Productos</NavLink>
                   <NavDropdown
                     title="Reportes"
                     className="drop" 

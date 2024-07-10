@@ -1,6 +1,6 @@
 import {React, useEffect, useState} from 'react'
 
-const PRODUCTS=[
+let PRODUCTS=[
 	{
 		"id":1,
 		"category":"notebook",
@@ -8,7 +8,9 @@ const PRODUCTS=[
 		"description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. " , 
 		"img": "https://rukminim1.flixcart.com/image/416/416/jrxtea80/laptop-skin-decal/s/d/t/mcbk-gw11996-printed-destiny-2-skin-top-gadgets-wrap-13-original-imafdkmmqkfvphjh.jpeg?q=70",
 		"price":1000,
-		"stock":10
+		"stock":10,
+		"purchasePrice":900
+
 	},
 {
 	"id":2,
@@ -17,7 +19,8 @@ const PRODUCTS=[
 	"description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ", 
 	"img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTI7J56b6VP8qQpumBO3vYIadmuAkc7aiBxaw&usqp=CAU",
 	"price":2000,
-	"stock":5
+	"stock":5,
+	"purchasePrice":900
 },
 {
 	"id":3,
@@ -26,7 +29,8 @@ const PRODUCTS=[
 	"description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. " , 
 	"img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfrFrieLImoivy6RyT8Uo0E9JJbwXdh9vFbK6VotJUlXwwW8sNDW9jSJK28k-lRpy_LLc&usqp=CAU",
 	"price":1000,
-	"stock":8
+	"stock":8,
+	"purchasePrice":900
 },
 {
 	"id":4,
@@ -35,7 +39,8 @@ const PRODUCTS=[
 	"description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ", 
 	"img": "https://ih1.redbubble.net/image.4905772123.1475/mwo,x540,ipad_2_snap-pad,600x600,f8f8f8.u1.jpg",
 	"price":2000,
-	"stock":11
+	"stock":11,
+	"purchasePrice":1900
 },
 {
 	"id":5,
@@ -44,7 +49,8 @@ const PRODUCTS=[
 	"description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ", 
 	"img": "https://canary.contestimg.wish.com/api/webimage/607c86f9f430bd5e00f0e9be-large.jpg?cache_buster=b3875832bb88d49ddab72075169129e1",
 	"price":2000,
-	"stock":9
+	"stock":9,
+	"purchasePrice":1900
 },
 {
 	"id":6,
@@ -53,7 +59,8 @@ const PRODUCTS=[
 	"description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ", 
 	"img": "https://ae03.alicdn.com/kf/H3badf3430f4b4ce7aa3f91a2a029c50cE.jpg",
 	"price":2000,
-	"stock":14
+	"stock":14,
+	"purchasePrice":1900
 },
 {
 	"id":7,
@@ -62,7 +69,8 @@ const PRODUCTS=[
 	"description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ", 
 	"img": "https://canary.contestimg.wish.com/api/webimage/5f71fa7d58567c5f3a97c97f-large.jpg?cache_buster=38600c5da7a23eecdfa1a230ce21d154",
 	"price":2000,
-	"stock":11
+	"stock":11,
+	"purchasePrice":1900
 },
 {
 	"id":8,
@@ -71,7 +79,8 @@ const PRODUCTS=[
 	"description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ", 
 	"img": "https://canary.contestimg.wish.com/api/webimage/5f9fed8334daceb28ff01ec3-large.jpg?cache_buster=2e749519355f7ce4576853959f5603ce",
 	"price":2000,
-	"stock":3
+	"stock":3,
+	"purchasePrice":1900
 },
 {
 	"id":9,
@@ -80,7 +89,8 @@ const PRODUCTS=[
 	"description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ", 
 	"img": "https://ih1.redbubble.net/image.4844174462.3370/mwo,x540,ipad_2_snap-pad,600x600,f8f8f8.jpg",
 	"price":2000,
-	"stock":6
+	"stock":6,
+	"purchasePrice":1900
 },
 {
 	"id":10,
@@ -89,7 +99,8 @@ const PRODUCTS=[
 	"description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ", 
 	"img": "https://ih1.redbubble.net/image.4730467754.9824/mwo,x540,ipad_2_snap-pad,600x600,f8f8f8.u1.jpg",
 	"price":2000,
-	"stock":19
+	"stock":19,
+	"purchasePrice":1900
 }
 ]
 
@@ -129,6 +140,7 @@ let SUPPLIERS = [
 		resolve(SUPPLIERS.find((sup) => sup.id === parseInt(supplierId))), 400);
 	});
   };
+    /*Productos*/ 
 
 export const getProduct =()=>{
     return new Promise((resolve)=>{
@@ -151,7 +163,38 @@ export const getProductsByCategory =(category)=>{
     })
 }
 
+export const deleteProduct = (id) => {
+	return new Promise((resolve) => {
+	  PRODUCTS = PRODUCTS.filter((product) => product.id !== id);
+	  setTimeout(() => resolve(id), 300);
+	});
+  };
+  export const updateProduct = (id, updatedProduct) => {
+	return new Promise((resolve, reject) => {
+	  setTimeout(() => {
+		PRODUCTS = PRODUCTS.map((product) =>
+		  product.id === id ? { ...product, ...updatedProduct } : product
+		);
+		resolve(updatedProduct);
+	  }, 500);
+	});
+  };
+  export const addProduct = (product) => {
+	return new Promise((resolve) => {
+	  const newProduct = { 
+		id: PRODUCTS.length + 1, 
+		...product 
+	  };
+	  PRODUCTS.push(newProduct);
+	  setTimeout(() => resolve(newProduct), 300);
+	});
+  };
 
+  
+  
+  
+  /*Fin productos */
+  
   export const addSupplier = (supplier) => {
 	return new Promise((resolve) => {
 	  const newSupplier = { id: SUPPLIERS.length + 1, ...supplier };
@@ -175,7 +218,7 @@ export const getProductsByCategory =(category)=>{
 	  setTimeout(() => resolve(id), 300);
 	});
   };
-  
+
 
 const categories = ["notebook", "celular", "tablet"]
 

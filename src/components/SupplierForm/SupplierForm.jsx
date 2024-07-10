@@ -11,7 +11,7 @@ const SupplierForm = ({ initialData = {}, onSave }) => {
   const [category, setCategory] = useState('');
 
   useEffect(() => {
-    // Update state with initialData only when it changes
+    
     setName(initialData.name || '');
     setPhone(initialData.phone || '');
     setEmail(initialData.email || '');
@@ -21,7 +21,6 @@ const SupplierForm = ({ initialData = {}, onSave }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSave({ name, phone, email, category });
-    // Reset form fields after saving
     setName('');
     setPhone('');
     setEmail('');

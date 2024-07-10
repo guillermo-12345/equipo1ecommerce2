@@ -10,6 +10,7 @@ import CheckOut from './views/CheckOut';
 import SupplierList from './components/SupplierList/SupplierList'; 
 import SalesReport from './components/SalesReport/SalesReport';
 import PurchaseReport from './components/PurchaseReport/PurchaseReport';
+import ProductList from './components/ProductList/ProductList';
 function App(){
  
   return (
@@ -23,6 +24,7 @@ function App(){
         <Route path ='/contact' element={<Contact/>}/>
         <Route path="/cart" element={<Cart/>}/>
         <Route path="/suppliers" element={<SupplierList/>}/>
+        <Route path="/products" element={<ProductList/>}/>
         <Route path="/checkout" element={<CheckOut/>}/>
         <Route path="/sales-report" element={<SalesReport/>} />
         <Route path="/purchase-report" element={<PurchaseReport />} />
