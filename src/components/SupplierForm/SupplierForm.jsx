@@ -11,10 +11,6 @@ const SupplierForm = ({ initialData = {}, onSave }) => {
   const [category, setCategory] = useState(initialData.category || '');
 
   useEffect(() => {
-<<<<<<< HEAD
-=======
-    
->>>>>>> de79b4f46bde2d1821c8f38bb844812a62162e79
     setName(initialData.name || '');
     setPhone(initialData.phone || '');
     setEmail(initialData.email || '');
