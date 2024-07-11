@@ -245,7 +245,6 @@ export const deleteProduct = (id) => {
 	  setTimeout(() => resolve(newProduct), 300);
 	});
   };
-<<<<<<< HEAD
 
 export const getClientes = () => {
 	return new Promise((resolve) => {
@@ -288,8 +287,6 @@ export const getClientes = () => {
 	  }, 300);
 	});
   };
-=======
->>>>>>> de79b4f46bde2d1821c8f38bb844812a62162e79
 
   
   
