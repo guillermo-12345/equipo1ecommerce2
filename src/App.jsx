@@ -11,10 +11,8 @@ import SupplierList from './components/SupplierList/SupplierList';
 import SalesReport from './components/SalesReport/SalesReport';
 import PurchaseReport from './components/PurchaseReport/PurchaseReport';
 import ProductList from './components/ProductList/ProductList';
-<<<<<<< HEAD
 import ClienteList from './components/ClientesList/ClientesList';
-=======
->>>>>>> de79b4f46bde2d1821c8f38bb844812a62162e79
+
 function App(){
  
   return (
