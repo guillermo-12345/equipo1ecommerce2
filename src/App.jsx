@@ -11,7 +11,10 @@ import SupplierList from './components/SupplierList/SupplierList';
 import SalesReport from './components/SalesReport/SalesReport';
 import PurchaseReport from './components/PurchaseReport/PurchaseReport';
 import ProductList from './components/ProductList/ProductList';
+<<<<<<< HEAD
 import ClienteList from './components/ClientesList/ClientesList';
+=======
+>>>>>>> de79b4f46bde2d1821c8f38bb844812a62162e79
 function App(){
  
   return (
@@ -25,6 +28,7 @@ function App(){
         <Route path ='/contact' element={<Contact/>}/>
         <Route path="/cart" element={<Cart/>}/>
         <Route path="/suppliers" element={<SupplierList/>}/>
+        <Route path="/products" element={<ProductList/>}/>
         <Route path="/checkout" element={<CheckOut/>}/>
         <Route path="/sales-report" element={<SalesReport/>} />
         <Route path="/purchase-report" element={<PurchaseReport />} />
