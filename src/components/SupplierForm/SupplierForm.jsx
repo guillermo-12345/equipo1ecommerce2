@@ -5,13 +5,12 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 
 const SupplierForm = ({ initialData = {}, onSave }) => {
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [category, setCategory] = useState('');
+  const [name, setName] = useState(initialData.name || '');
+  const [phone, setPhone] = useState(initialData.phone || '');
+  const [email, setEmail] = useState(initialData.email || '');
+  const [category, setCategory] = useState(initialData.category || '');
 
   useEffect(() => {
-    // Update state with initialData only when it changes
     setName(initialData.name || '');
     setPhone(initialData.phone || '');
     setEmail(initialData.email || '');
@@ -21,7 +20,6 @@ const SupplierForm = ({ initialData = {}, onSave }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSave({ name, phone, email, category });
-    // Reset form fields after saving
     setName('');
     setPhone('');
     setEmail('');
@@ -63,7 +61,7 @@ const SupplierForm = ({ initialData = {}, onSave }) => {
         <Form.Group className="mb-3 col-4">
           <Form.Label>Email</Form.Label>
           <Form.Control
-            type='text'
+            type='email'
             placeholder='Email'
             value={email}
             onChange={(e) => setEmail(e.target.value)}

@@ -10,6 +10,8 @@ import CheckOut from './views/CheckOut';
 import SupplierList from './components/SupplierList/SupplierList'; 
 import SalesReport from './components/SalesReport/SalesReport';
 import PurchaseReport from './components/PurchaseReport/PurchaseReport';
+import ProductList from './components/ProductList/ProductList';
+import ClienteList from './components/ClientesList/ClientesList';
 function App(){
  
   return (
@@ -26,6 +28,8 @@ function App(){
         <Route path="/checkout" element={<CheckOut/>}/>
         <Route path="/sales-report" element={<SalesReport/>} />
         <Route path="/purchase-report" element={<PurchaseReport />} />
+        <Route path="/products" element={<ProductList/>}/>
+        <Route path="/Clientes" element={<ClienteList/>}/>
         <Route path="*" element={<h1>404 NOT FOUND</h1>}/>
         
       </Routes>

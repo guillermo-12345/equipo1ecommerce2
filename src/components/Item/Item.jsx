@@ -1,11 +1,12 @@
 import React from "react";
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Accordion from 'react-bootstrap/Accordion';
+import Button from 'react-bootstrap/Button';
 
-const Item = ({ id, title, img, price, description }) => {
+const Item = ({ id, title, img, price, description, purchasePrice, showDeleteButton, showEditButton, onDelete, onEdit }) => {
     return (
       <div className="card shadow" style={{ width: '20rem', margin: '.5rem' }}>
-       <img src={img} className="card-img-top shadow rounded-2 object-fit-fill p-3"  alt={title} /> 
+        <img src={img} className="card-img-top shadow rounded-2 object-fit-fill p-3" alt={title} />
         <div className="card-body">
           <p className=" text-uppercase card-title">{title}</p>
           <Accordion defaultActiveKey="0">
@@ -25,17 +26,37 @@ const Item = ({ id, title, img, price, description }) => {
               </p>
             </div>
           </div>
-          <p className=" card-footer">
-            ${price}
-          </p>
-          <Link to={`/item/${id}`} > 
-            <button varirant='primary' className="btn btn-primary">
-              Ver más
-            </button>
-          </Link>
+          {showDeleteButton || showEditButton ? (
+            <div>
+              <p className=" card-footer">
+                Precio de compra: ${purchasePrice}
+              </p>
+              <p className=" card-footer">
+                Precio: ${price}
+              </p>
+            </div>
+          ) : (
+            <p className=" card-footer">
+              ${price}
+            </p>
+          )}
+
+          <div className="d-flex justify-content-between mt-2">
+            {!showDeleteButton && !showEditButton && (
+              <Link to={`/item/${id}`}>
+                <Button variant="primary">Ver más</Button>
+              </Link>
+            )}
+            {showEditButton && (
+              <Button variant="warning" onClick={() => onEdit(id)}>Editar</Button>
+            )}
+            {showDeleteButton && (
+              <Button variant="danger" onClick={() => onDelete(id)}>Eliminar</Button>
+            )}
+          </div>
         </div>
       </div>
     )
-  }
-  
-  export default Item
+}
+
+export default Item;

@@ -1,6 +1,6 @@
 import {React, useEffect, useState} from 'react'
 
-const PRODUCTS=[
+let PRODUCTS=[
 	{
 		"id":1,
 		"category":"notebook",
@@ -117,6 +117,62 @@ let SUPPLIERS = [
 	},
   ];
   
+
+  const CLIENTES = [
+    {
+        id: 12345678,
+        name: "Juan Perez",
+        cuit: "20123456781"
+    },
+    {
+        id: 87654321,
+        name: "Maria Lopez",
+        cuit: "20876543215"
+    },
+    {
+        id: 23456789,
+        name: "Carlos Gomez",
+        cuit: "20234567897"
+    },
+    {
+        id: 98765432,
+        name: "Ana Martinez",
+        cuit: "20987654326"
+    },
+    {
+        id: 34567890,
+        name: "Lucia Fernandez",
+        cuit: "20345678904"
+    },
+    {
+        id: 45678901,
+        name: "Jorge Rodriguez",
+        cuit: "20456789013"
+    },
+    {
+        id: 56789012,
+        name: "Laura Sanchez",
+        cuit: "20567890121"
+    },
+    {
+        id: 67890123,
+        name: "Roberto Diaz",
+        cuit: "20678901231"
+    },
+    {
+        id: 78901234,
+        name: "Elena Garcia",
+        cuit: "20789012341"
+    },
+    {
+        id: 89012345,
+        name: "Fernando Gutierrez",
+        cuit: "20890123456"
+    }
+];
+
+export default CLIENTES;
+
   export const getSuppliers = () => {
 	return new Promise((resolve) => {
 	  setTimeout(() => resolve(SUPPLIERS), 300);
@@ -151,6 +207,74 @@ export const getProductsByCategory =(category)=>{
     })
 }
 
+export const deleteProduct = (id) => {
+	return new Promise((resolve) => {
+	  PRODUCTS = PRODUCTS.filter((product) => product.id !== id);
+	  setTimeout(() => resolve(id), 300);
+	});
+  };
+  export const updateProduct = (id, updatedProduct) => {
+	return new Promise((resolve, reject) => {
+	  setTimeout(() => {
+		PRODUCTS = PRODUCTS.map((product) =>
+		  product.id === id ? { ...product, ...updatedProduct } : product
+		);
+		resolve(updatedProduct);
+	  }, 500);
+	});
+  };
+  export const addProduct = (product) => {
+	return new Promise((resolve) => {
+	  const newProduct = { 
+		id: PRODUCTS.length + 1, 
+		...product 
+	  };
+	  PRODUCTS.push(newProduct);
+	  setTimeout(() => resolve(newProduct), 300);
+	});
+  };
+
+export const getClientes = () => {
+	return new Promise((resolve) => {
+	  setTimeout(() => resolve(CLIENTES), 300);
+	});
+  };
+
+
+  
+  export const addClientes = (cliente) => {
+	return new Promise((resolve) => {
+		const newCliente= { id: CLIENTES.length + 1, ...cliente };
+	  CLIENTES.push(newCliente);
+	  setTimeout(() => {
+		resolve(newCliente);
+	  }, 300);
+	});
+  };
+  
+  export const updateClientes = (id, updatedCliente) => {
+	return new Promise((resolve) => {
+	  const index = CLIENTES.findIndex((cliente) => cliente.id === id);
+	  if (index !== -1) {
+		CLIENTES[index] = { ...CLIENTES[index], ...updatedCliente };
+	  }
+	  setTimeout(() => {
+		resolve(CLIENTES[index]);
+	  }, 300);
+	});
+  };
+  
+  export const deleteClientes = (id) => {
+	return new Promise((resolve) => {
+	  const index = CLIENTES.findIndex((cliente) => cliente.id === id);
+	  if (index !== -1) {
+		CLIENTES.splice(index, 1);
+	  }
+	  setTimeout(() => {
+		resolve(id);
+	  }, 300);
+	});
+  };
 
   export const addSupplier = (supplier) => {
 	return new Promise((resolve) => {

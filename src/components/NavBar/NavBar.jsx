@@ -37,7 +37,7 @@ const NavBar=()=>{
                 <Nav className="justify-content-end flex-grow-1 pe-3">
                   <NavLink className="inactive"  to={"/"}>Home</NavLink>
                   <NavDropdown
-                    title="Productos"
+                    title="Tienda"
                     className="drop" 
                     id={`offcanvasNavbarDropdown-expand-${expand}`}
                   >
@@ -45,7 +45,9 @@ const NavBar=()=>{
                     <NavLink className="inactive" to={"/category/celular"}>Celulares</NavLink>
                     <NavLink className="inactive"  to={"/category/tablet"}>Tablets</NavLink>
                   </NavDropdown>
+                  <NavLink className="inactive"  to={"/Clientes"}>Clientes</NavLink>
                   <NavLink className="inactive"  to={"/suppliers"}>Proveedores</NavLink>
+                  <NavLink className="inactive"  to={"/products"}>Productos</NavLink>
                   <NavDropdown
                     title="Reportes"
                     className="drop" 
@@ -54,7 +56,6 @@ const NavBar=()=>{
                     <NavLink className="inactive"  to={"/sales-report"}>Ventas</NavLink>
                     <NavLink className="inactive" to={"/purchase-report"}>Compras</NavLink>
                   </NavDropdown>
-                  <NavLink className="inactive" to={"/sales-report"}>Reporte</NavLink>
                   <NavLink className="inactive"  to={"/contact"}>Contacto</NavLink>
                 </Nav>
                 {/* <Form className="d-flex">
