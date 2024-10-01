@@ -4,12 +4,14 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap';
-import { initializeApp } from "firebase/app";
-
+import { initializeApp } from "firebase/app"; // Solo SDK para frontend
 import { BrowserRouter } from 'react-router-dom';
 import { CartProvider } from './context/cartContext';
 
+// Eliminar datos de localStorage
 window.localStorage.removeItem('orders'); 
+
+// Configuración de Firebase para frontend
 const firebaseConfig = {
   apiKey: "AIzaSyCfAJnhRLGif5Rw537AQmounfGVi0cST10",
   authDomain: "equipo1-ecommerce.firebaseapp.com",
@@ -19,27 +21,22 @@ const firebaseConfig = {
   appId: "1:66738131494:web:e199a3bbf8ca100a010ce7",
   measurementId: "G-3B4BKNN2L6"
 };
-var admin = require("firebase-admin");
 
-var serviceAccount = require("equipo1-ecommerce-firebase-adminsdk-shdvj-444ab7c9db.json");
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-});
-
+// Inicializa Firebase solo para el cliente (frontend)
 initializeApp(firebaseConfig);
+
+// Renderizado de la aplicación React
 const rootElement = document.getElementById('root');
 const root = createRoot(rootElement);
+
 root.render(
-  
   <CartProvider>
-  <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </React.StrictMode>
+    <React.StrictMode>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </React.StrictMode>
   </CartProvider>
 );
-
 
 reportWebVitals();

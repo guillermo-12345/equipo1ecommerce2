@@ -1,6 +1,6 @@
 
 import { signInWithPopup, signOut } from "firebase/auth"
-import { auth, googleProvider } from "../config/firebase"
+import { auth, googleProvider } from "../service/firebaseConfig"
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import axios from 'axios'

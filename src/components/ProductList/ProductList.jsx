@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getProduct, deleteProduct, updateProduct, addProduct } from '../../asyncMock';
+import axios from 'axios';
 import Item from '../Item/Item';
 import ProductForm from '../ProductForm/ProductForm';
 
@@ -10,12 +10,12 @@ const ProductList = () => {
 
   useEffect(() => {
     setLoading(true);
-    getProduct()
-      .then((data) => {
-        setProducts(data);
+    axios.get('/api/productos')
+      .then((response) => {
+        setProducts(response.data); 
       })
       .catch((error) => {
-        console.error('Error fetching products:', error);
+        console.error('Error al obtener los productos:', error);
       })
       .finally(() => {
         setLoading(false);
@@ -24,9 +24,12 @@ const ProductList = () => {
 
   const handleDeleteProduct = (id) => {
     setLoading(true);
-    deleteProduct(id)
+    axios.delete(`/api/productos/${id}`)
       .then(() => {
         setProducts((prevProducts) => prevProducts.filter((product) => product.id !== id));
+      })
+      .catch((error) => {
+        console.error('Error al eliminar el producto:', error);
       })
       .finally(() => {
         setLoading(false);
@@ -40,7 +43,7 @@ const ProductList = () => {
 
   const handleUpdateProduct = (id, updatedProduct) => {
     setLoading(true);
-    updateProduct(id, updatedProduct)
+    axios.put(`/api/productos/${id}`, updatedProduct)
       .then(() => {
         setProducts((prevProducts) =>
           prevProducts.map((product) =>
@@ -48,17 +51,24 @@ const ProductList = () => {
           )
         );
       })
+      .catch((error) => {
+        console.error('Error al actualizar el producto:', error);
+      })
       .finally(() => {
         setLoading(false);
         setEditProduct(null);
       });
   };
 
+
   const handleAddProduct = (newProduct) => {
     setLoading(true);
-    addProduct(newProduct)
-      .then((addedProduct) => {
-        setProducts((prevProducts) => [...prevProducts, addedProduct]);
+    axios.post('/api/productos', newProduct)
+      .then((response) => {
+        setProducts((prevProducts) => [...prevProducts, response.data]);
+      })
+      .catch((error) => {
+        console.error('Error al agregar el producto:', error);
       })
       .finally(() => {
         setLoading(false);
@@ -73,22 +83,26 @@ const ProductList = () => {
     <div className="product-list-container">
       <h2>Lista de Productos</h2>
       <div className="d-flex flex-wrap justify-content-around">
-        {products.map((product) => (
-          <Item
-            key={product.id}
-            id={product.id}
-            title={product.title}
-            img={product.img}
-            price={product.price}
-            purchasePrice={product.purchasePrice}
-            description={product.description}
-            showEditButton={true}
-            showDeleteButton={true}
-            onEdit={handleEditProduct}
-            onDelete={handleDeleteProduct}
-            className="product-item"
-          />
-        ))}
+        {products.length > 0 ? (
+          products.map((product) => (
+            <Item
+              key={product.id}
+              id={product.id}
+              title={product.title}
+              img={product.img}
+              price={product.price}
+              purchasePrice={product.purchasePrice}
+              description={product.description}
+              showEditButton={true}
+              showDeleteButton={true}
+              onEdit={handleEditProduct}
+              onDelete={handleDeleteProduct}
+              className="product-item"
+            />
+          ))
+        ) : (
+          <p>No hay productos disponibles.</p>
+        )}
       </div>
       {editProduct && (
         <ProductForm

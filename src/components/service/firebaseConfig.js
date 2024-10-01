@@ -2,11 +2,8 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from 'firebase/firestore'
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyCfAJnhRLGif5Rw537AQmounfGVi0cST10",
   authDomain: "equipo1-ecommerce.firebaseapp.com",
@@ -17,8 +14,11 @@ const firebaseConfig = {
   measurementId: "G-3B4BKNN2L6"
 };
 
-// Initialize Firebase
+
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+export const auth = getAuth(app);
+export const googleProvider = new GoogleAuthProvider();
+const db = getFirestore(app);
 
-export const db = getFirestore(app)
+export { db };
