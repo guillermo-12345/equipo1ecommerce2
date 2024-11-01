@@ -20,7 +20,7 @@ const SupplierList = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [getSuppliers]);
 
   const handleAddSupplier = (supplier) => {
     setLoading(true);
@@ -69,7 +69,7 @@ const SupplierList = () => {
   return (
     <div>
       <h1>Lista de Proveedores</h1>
-      
+
       {suppliers.map((supplier) => (
         <div key={supplier.id}>
           <p>Nombre: {supplier.name}</p>
