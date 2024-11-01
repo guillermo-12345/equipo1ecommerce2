@@ -3,7 +3,7 @@ import 'bootstrap';
 import NavBar from './components/NavBar/NavBar';
 import ItemListContainer from './components/ItemListContainer/ItemListContainer';
 import ItemDetailContainer from './components/ItemDetailContainer/ItemDetailContainer';
-import { Routes, Route, Link, useNavigate } from 'react-router-dom'; // Importar useNavigate
+import { Routes, Route, Link, useNavigate } from 'react-router-dom'; 
 import { useEffect } from 'react'; 
 import { Contact } from './views/Contact';
 import { Cart } from './views/Cart';
