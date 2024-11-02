@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { collection, query, getDocs, addDoc, updateDoc, doc, deleteDoc } from 'firebase/firestore';
 import { db } from '../service/firebaseConfig'; 
-import { Button, Dialog, DataTable, Column, Toast } from 'primereact'; 
+import { Button, Dialog, DataTable, Column,Toast } from 'primereact'; 
 
 const MyComponent = () => {
   const [loading, setLoading] = useState(false);
