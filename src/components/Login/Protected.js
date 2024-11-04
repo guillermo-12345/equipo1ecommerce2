@@ -1,7 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { collection, query, getDocs, addDoc, updateDoc, doc, deleteDoc } from 'firebase/firestore';
-import { db } from '../service/firebaseConfig'; 
-import { Button, Dialog, DataTable, Column,Toast } from 'primereact'; 
+import { db } from '../service/firebaseConfig';
+import { Button } from 'primereact/button';
+import { Dialog } from 'primereact/dialog';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { Toast } from 'primereact/toast';
+import { InputText } from 'primereact/inputtext';
+import { InputNumber } from 'primereact/inputnumber';
+import { InputTextarea } from 'primereact/inputtextarea';
+
 
 const MyComponent = () => {
   const [loading, setLoading] = useState(false);
