@@ -11,7 +11,7 @@ import { InputNumber } from 'primereact/inputnumber';
 import { InputTextarea } from 'primereact/inputtextarea';
 
 
-const MyComponent = () => {
+const Protected = () => {
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -218,4 +218,4 @@ const MyComponent = () => {
   );
 };
 
-export default MyComponent;
+export default Protected;

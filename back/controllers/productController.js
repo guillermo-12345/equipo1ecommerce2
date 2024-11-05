@@ -1,5 +1,5 @@
 
-const connection = require('./dbConfig');
+const connection = require('../../src/components/service/dbConfig');
 exports.getProducts = (req, res) => {
   connection.query('SELECT * FROM products', (err, results) => {
     if (err) {

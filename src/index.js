@@ -4,14 +4,14 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap';
-import { initializeApp } from "firebase/app"; // Solo SDK para frontend
+import { initializeApp } from "firebase/app"; 
 import { BrowserRouter } from 'react-router-dom';
 import { CartProvider } from './context/cartContext';
 
-// Eliminar datos de localStorage
+
 window.localStorage.removeItem('orders'); 
 
-// Configuración de Firebase para frontend
+
 const firebaseConfig = {
   apiKey: "AIzaSyCfAJnhRLGif5Rw537AQmounfGVi0cST10",
   authDomain: "equipo1-ecommerce.firebaseapp.com",

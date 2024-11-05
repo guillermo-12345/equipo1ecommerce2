@@ -146,6 +146,9 @@ app.get('/proveedores', async (req, res) => {
 });
  */
 
+
+/* 
+
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -290,4 +293,216 @@ app.get('/proveedores', async (req, res) => {
   } catch (err) {
       res.status(500).json({ error: 'Error al obtener los proveedores' });
   }
+});
+ */
+
+
+const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const { Datastore } = require('@google-cloud/datastore');
+
+// Inicializar express
+const app = express();
+app.use(cors());
+app.use(bodyParser.json());
+
+const datastore = new Datastore({
+  projectId: 'equipo1-ecommerce',
+  keyFilename: './credentials/firebase-key.json' 
+});
+
+
+
+// Función auxiliar para formatear datos de Datastore
+const getEntityData = (entity) => ({
+  id: entity[datastore.KEY].id,
+  ...entity,
+});
+
+// Ruta para obtener todos los clientes
+app.get('/api/clientes', async (req, res) => {
+  try {
+    const query = datastore.createQuery('clientes');
+    const [clients] = await datastore.runQuery(query);
+
+    if (clients.length === 0) {
+      console.log('No se encontraron clientes.');
+    } else {
+      console.log(`Hay ${clients.length} clientes en la base de datos.`);
+    }
+
+    res.json(clients.map(getEntityData));
+  } catch (err) {
+    console.error('Error encontrando clientes:', err);
+    res.status(500).json({ error: 'Error encontrando clientes' });
+  }
+});
+
+// Ruta para agregar un cliente
+app.post('/api/clientes', async (req, res) => {
+  const { name, cuit, email } = req.body;
+  const clientKey = datastore.key('clientes');
+  const entity = {
+    key: clientKey,
+    data: { name, cuit, email },
+  };
+  try {
+    await datastore.save(entity);
+    res.status(201).json({ id: clientKey.id, name, cuit, email });
+  } catch (err) {
+    console.error('Error agregando cliente:', err);
+    res.status(500).json({ error: 'Error agregando cliente' });
+  }
+});
+
+// Ruta para actualizar un cliente por ID
+app.put('/api/clientes/:id', async (req, res) => {
+  const { id } = req.params;
+  const { name, cuit, email } = req.body;
+  const clientKey = datastore.key(['clientes', parseInt(id)]);
+  try {
+    await datastore.update({ key: clientKey, data: { name, cuit, email } });
+    res.json({ id, name, cuit, email });
+  } catch (err) {
+    console.error('Error al actualizar el cliente:', err);
+    res.status(500).json({ error: 'Error al actualizar el cliente' });
+  }
+});
+
+// Ruta para eliminar un cliente por ID
+app.delete('/api/clientes/:id', async (req, res) => {
+  const { id } = req.params;
+  const clientKey = datastore.key(['clientes', parseInt(id)]);
+  try {
+    await datastore.delete(clientKey);
+    res.status(204).send();
+  } catch (err) {
+    console.error('Error al eliminar el cliente:', err);
+    res.status(500).json({ error: 'Error al eliminar el cliente' });
+  }
+});
+
+// Ruta para obtener todos los productos
+app.get('/api/productos', async (req, res) => {
+  try {
+    const query = datastore.createQuery('productos');
+    const [products] = await datastore.runQuery(query);
+    res.json(products.map(getEntityData));
+  } catch (err) {
+    console.error('Error al obtener los productos:', err);
+    res.status(500).json({ error: 'Error al obtener los productos' });
+  }
+});
+
+// Ruta para agregar un producto
+app.post('/api/productos', async (req, res) => {
+  const { category, title, description, price, img, stock } = req.body;
+  const productKey = datastore.key('productos');
+  const entity = {
+    key: productKey,
+    data: { category, title, description, price, img, stock },
+  };
+  try {
+    await datastore.save(entity);
+    res.status(201).json({ id: productKey.id, category, title, description, price, img, stock });
+  } catch (err) {
+    console.error('Error al agregar el producto:', err);
+    res.status(500).json({ error: 'Error al agregar el producto' });
+  }
+});
+
+// Ruta para actualizar un producto por ID
+app.put('/api/productos/:id', async (req, res) => {
+  const { id } = req.params;
+  const { category, title, description, price, img, stock } = req.body;
+  const productKey = datastore.key(['productos', parseInt(id)]);
+  try {
+    await datastore.update({
+      key: productKey,
+      data: { category, title, description, price, img, stock },
+    });
+    res.json({ id, category, title, description, price, img, stock });
+  } catch (err) {
+    console.error('Error al actualizar el producto:', err);
+    res.status(500).json({ error: 'Error al actualizar el producto' });
+  }
+});
+
+// Ruta para eliminar un producto por ID
+app.delete('/api/productos/:id', async (req, res) => {
+  const { id } = req.params;
+  const productKey = datastore.key(['productos', parseInt(id)]);
+  try {
+    await datastore.delete(productKey);
+    res.status(204).send();
+  } catch (err) {
+    console.error('Error al eliminar el producto:', err);
+    res.status(500).json({ error: 'Error al eliminar el producto' });
+  }
+});
+
+// Ruta para obtener todos los proveedores
+app.get('/api/proveedores', async (req, res) => {
+  try {
+    const query = datastore.createQuery('proveedores');
+    const [providers] = await datastore.runQuery(query);
+    res.json(providers.map(getEntityData));
+  } catch (err) {
+    console.error('Error al obtener los proveedores:', err);
+    res.status(500).json({ error: 'Error al obtener los proveedores' });
+  }
+});
+
+// Ruta para agregar un proveedor
+app.post('/api/proveedores', async (req, res) => {
+  const { name, phone, email, category } = req.body;
+  const providerKey = datastore.key('proveedores');
+  const entity = {
+    key: providerKey,
+    data: { name, phone, email, category },
+  };
+  try {
+    await datastore.save(entity);
+    res.status(201).json({ id: providerKey.id, name, phone, email, category });
+  } catch (err) {
+    console.error('Error al agregar el proveedor:', err);
+    res.status(500).json({ error: 'Error al agregar el proveedor' });
+  }
+});
+
+// Ruta para actualizar un proveedor por ID
+app.put('/api/proveedores/:id', async (req, res) => {
+  const { id } = req.params;
+  const { name, phone, email, category } = req.body;
+  const providerKey = datastore.key(['proveedores', parseInt(id)]);
+  try {
+    await datastore.update({
+      key: providerKey,
+      data: { name, phone, email, category },
+    });
+    res.json({ id, name, phone, email, category });
+  } catch (err) {
+    console.error('Error al actualizar el proveedor:', err);
+    res.status(500).json({ error: 'Error al actualizar el proveedor' });
+  }
+});
+
+// Ruta para eliminar un proveedor por ID
+app.delete('/api/proveedores/:id', async (req, res) => {
+  const { id } = req.params;
+  const providerKey = datastore.key(['proveedores', parseInt(id)]);
+  try {
+    await datastore.delete(providerKey);
+    res.status(204).send();
+  } catch (err) {
+    console.error('Error al eliminar el proveedor:', err);
+    res.status(500).json({ error: 'Error al eliminar el proveedor' });
+  }
+});
+
+// Iniciar el servidor
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en el puerto ${PORT}`);
 });

@@ -14,7 +14,7 @@ import PurchaseReport from './components/PurchaseReport/PurchaseReport';
 import ProductList from './components/ProductList/ProductList';
 import ClienteList from './components/ClientesList/ClientesList';
 import { Auth } from './components/Login/Auth';
-import { Protected } from './components/Login/Protected';
+import Protected from './components/Login/Protected';
 
 function App() {
   return (
