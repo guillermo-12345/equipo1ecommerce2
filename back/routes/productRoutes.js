@@ -1,23 +1,11 @@
-
-const productController = require('../controllers/productController');
-
-
-router.get('/products', productController.getProducts);
-router.post('/products', productController.addProduct);
-
-module.exports = router;
-
 const express = require('express');
 const router = express.Router();
-const pool = require('../db'); 
-router.get('/productos', async (req, res) => {
-  try {
-    const [rows] = await pool.query('SELECT * FROM productos');
-    res.json(rows);
-  } catch (err) {
-    console.error('Error al obtener los productos:', err);
-    res.status(500).json({ error: 'Error al obtener los productos' });
-  }
-});
+const { getProducts, addProduct, deleteProduct } = require('../controllers/productController');
+const { validadorFirebase, validadorAdmin } = require('../middlewares/validadorJWT');
+
+router.get('/products', validadorFirebase, getProducts);
+
+router.post('/products', validadorFirebase, validadorAdmin, addProduct);
+router.delete('/products/:id', validadorFirebase, validadorAdmin, deleteProduct);
 
 module.exports = router;

@@ -1,65 +1,61 @@
-const Usuario = require('../model/Usuario');
-const bcrypt = require('bcryptjs');
-const { generarJWT } = require('../helpers/generadorJWT');
 const admin = require('firebase-admin');
+const adminEmails = ["guillermo.ibanezc@gmail.com", "trek0.88@gmail.com"];
 
 const login = async (req, res) => {
-  const { firebaseToken} = req.body;
+  const { firebaseToken } = req.body;
 
   try {
+    // Verificar el token de Firebase
+    const decodedToken = await admin.auth().verifyIdToken(firebaseToken);
+    const uid = decodedToken.uid;
+    const user = await admin.auth().getUser(uid);
 
-    await admin.auth().verifyIdToken(firebaseToken).then(decodedToken => {
-      const uid = decodedToken.uid;
-      console.log(uid);
-    }).catch (error => {
-      console.error(error);
-      return res.status(400).json({
-        ok: false,
-        msg: 'Token invalido'
-      });
-    });
+    // Asignar el rol de usuario basado en el correo electrónico
+    const userRole = adminEmails.includes(user.email) ? 'admin' : 'user';
+    console.log("Correo del usuario:", user.email);
+    console.log("Rol asignado en el backend (login):", userRole);
 
-    return res.json({
-      ok: true,
-      
-    });
-
-    // const usuarioDB = await Usuario.findOne({ where: { email: email } });
-
-    // console.log(usuarioDB);
-
-    // if (usuarioDB) {
-    //   const validPassword = bcrypt.compareSync(password, usuarioDB.password);
-
-    //   if (!validPassword) {
-    //     return res.status(400).json({
-    //       ok: false,
-    //       msg: 'Usuario o contraseña incorrecta'
-    //     });
-    //   } else {
-    //     const token = await generarJWT(usuarioDB.id, usuarioDB.nombre);
-
-    //     res.json({
-    //       ok: true,
-    //       usuario: usuarioDB,
-    //       token
-    //     });
-    //   }
-    // } else {
-      return res.status(400).json({
-        ok: false,
-        msg: 'Usuario no encontrado'
-      });
-    //}
+    res.json({ userRole });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      ok: false,
-      msg: 'Error en el servidor'
-    });
+    console.error('Error al autenticar al usuario:', error);
+    res.status(401).json({ error: 'No autorizado' });
   }
 };
 
-module.exports = {
-  login
+const getUser = async (req, res) => {
+  const token = req.headers.authorization?.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ error: 'No autorizado' });
+  }
+
+  try {
+    const decodedToken = await admin.auth().verifyIdToken(token);
+    const uid = decodedToken.uid;
+    const user = await admin.auth().getUser(uid);
+
+    const userRole = adminEmails.includes(user.email) ? 'admin' : 'user';
+    console.log("Correo del usuario en getUser:", user.email);
+    console.log("Rol asignado en el backend (getUser):", userRole);
+
+    res.json({ userRole });
+  } catch (error) {
+    console.error('Error al obtener el rol del usuario:', error);
+    res.status(401).json({ error: 'No autorizado' });
+  }
 };
+
+const verifyRole = async (req, res) => {
+  const { firebaseToken } = req.body;
+  try {
+      const decodedToken = await admin.auth().verifyIdToken(firebaseToken);
+      const userRole = decodedToken.admin ? 'admin' : 'user'; 
+
+      res.json({ userRole });
+  } catch (error) {
+      console.error("Error al verificar el rol:", error);
+      res.status(401).json({ error: "No autorizado" });
+  }
+};
+
+module.exports = { login, getUser,verifyRole };
