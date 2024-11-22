@@ -1,15 +1,9 @@
-// models/Order.js
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db');
+const { dbConnection } = require('../config/db');
 
-const Order = sequelize.define('Order', {
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-  },
+const Order = dbConnection.define('Order', {
   buyer: {
-    type: DataTypes.JSON, // Puede almacenar uid, email u otros datos del cliente o proveedor
+    type: DataTypes.JSON, // Detalles del cliente o proveedor
     allowNull: false,
   },
   total: {
@@ -17,7 +11,7 @@ const Order = sequelize.define('Order', {
     allowNull: false,
   },
   type: {
-    type: DataTypes.ENUM('compra', 'venta'), // Diferencia entre compra y venta
+    type: DataTypes.ENUM('compra', 'venta'),
     allowNull: false,
   },
   date: {

@@ -4,7 +4,7 @@ const { generarJWT } = require('../../src/components/helpers/generadorJWT');
 
 const datastore = new Datastore({
   projectId: 'equipo1-ecommerce',
-  keyFilename: './credentials/firebase-key.json'
+  keyFilename: '../credentials/firebase-key.json'
 });
 
 // Función para registrar usuario si no existe

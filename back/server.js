@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 require('dotenv').config();
-const sequelize = require('./config/db');
+const { dbConnection } = require('./config/db');
 const supplierRoutes = require('./routes/supplierRoutes');
 const productRoutes = require('./routes/productRoutes');
 const clientRoutes = require('./routes/clientRoutes');
@@ -40,28 +40,16 @@ app.use((err, req, res, next) => {
 });
 
 // Conectar y sincronizar la base de datos
-const PORT = process.env.PORT || 3001;
-sequelize
-  .sync({ alter: true }) // Sincronización para desarrollo
-  .then(() => {
-    console.log('Base de datos sincronizada.');
-    app.listen(PORT, () => console.log(`Servidor corriendo en http://localhost:${PORT}`));
-  })
-  .catch((error) => {
-    console.error('Error al sincronizar la base de datos:', error);
+const port = process.env.PORT || 3000;
+dbConnection.sync()
+.then(() => {
+  console.log('Base de datos sincronizada');
+  app.listen(port, () => {
+    console.log(`Servidor escuchando en el puerto ${port}`);
   });
-
-
-
-
-// Servir archivos estáticos desde la carpeta "dist"
-app.use(express.static(path.join(__dirname, 'dist')));
-
-// Redirigir todas las rutas al index.html
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+})
+.catch((error) => {
+  console.error('Error al sincronizar la base de datos:', error);
 });
 
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en el puerto ${PORT}`);
-});
+

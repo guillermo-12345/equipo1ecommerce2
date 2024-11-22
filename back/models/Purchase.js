@@ -1,8 +1,8 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db');
+const { dbConnection } = require('../config/db');
 
-const Purchase = sequelize.define('Purchase', {
-  supplier_id: {
+const Purchase = dbConnection.define('Purchase', {
+  supplierId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
@@ -14,8 +14,6 @@ const Purchase = sequelize.define('Purchase', {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
   },
-}, {
-  timestamps: false,
 });
 
 module.exports = Purchase;

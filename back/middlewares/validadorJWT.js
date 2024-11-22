@@ -4,7 +4,7 @@ const { Datastore } = require('@google-cloud/datastore');
 
 const datastore = new Datastore({
   projectId: 'equipo1-ecommerce',
-  keyFilename: './credentials/firebase-key.json'
+  keyFilename: '../credentials/firebase-key.json'
 });
 
 const validadorJWT = (req, res, next) => {

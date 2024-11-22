@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db');
+const { dbConnection } = require('../config/db');
 
-const Product = sequelize.define('Product', {
+const Product = dbConnection.define('Product', {
   title: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -35,7 +35,7 @@ const Product = sequelize.define('Product', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'Suppliers', // Tabla asociada
+      model: 'Suppliers',
       key: 'id',
     },
   },

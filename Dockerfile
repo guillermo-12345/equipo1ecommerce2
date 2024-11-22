@@ -1,38 +1,20 @@
-# Etapa 1: Construcción del frontend
-FROM node:16 AS frontend-build
+# Usa una imagen base de Node.js
+FROM node:14
 
-# Establecer el directorio de trabajo para el frontend
+# Establece el directorio de trabajo
 WORKDIR /app
 
-# Copiar el archivo package.json y package-lock.json del frontend
-COPY ./package.json ./package-lock.json ./
+# Copia el archivo package.json y package-lock.json
+COPY package*.json ./
 
-# Instalar las dependencias necesarias del frontend
+# Instala las dependencias
 RUN npm install
 
-# Copiar el código fuente del frontend al contenedor
-COPY ./ ./
+# Copia el resto de los archivos de la aplicación
+COPY . .
 
-# Construir el frontend para producción
-RUN npm run build
+# Expone el puerto que usa la aplicación
+EXPOSE 3000
 
-# Etapa 2: Configuración del backend
-FROM node:16 AS backend
-
-# Establecer el directorio de trabajo para el backend
-WORKDIR /server
-
-# Copiar el código fuente del backend
-COPY ./back /server
-
-# Instalar las dependencias del backend
-RUN npm install
-
-# Copiar los archivos del frontend construido desde la etapa anterior al backend
-COPY --from=frontend-build /app/build /server/public
-
-# Exponer el puerto del backend
-EXPOSE 3001
-
-# Comando para iniciar el servidor
-CMD ["node", "server.js"]
+# Comando para iniciar la aplicación
+CMD ["npm", "start"]
