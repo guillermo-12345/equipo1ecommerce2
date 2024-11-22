@@ -14,7 +14,7 @@ const UpdateProductForm = ({ productId }) => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/productos/${productId}`);
+        const response = await axios.get(`http://localhost:3001/api/products/${productId}`);
         setFormData(response.data);
       } catch (error) {
         console.error('Error al obtener el producto:', error);
@@ -35,7 +35,7 @@ const UpdateProductForm = ({ productId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:5000/productos/${productId}`, formData);
+      await axios.put(`http://localhost:5000/products/${productId}`, formData);
       console.log('Producto actualizado');
     } catch (error) {
       console.error('Error al actualizar el producto:', error);

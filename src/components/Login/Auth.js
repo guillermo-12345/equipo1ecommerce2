@@ -1,54 +1,35 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { signInWithPopup } from 'firebase/auth';
+import { auth, googleProvider } from '../service/firebaseConfig';
+import { useAuth } from '../../context/AuthContext';
+import axios from 'axios';
 
-import { signInWithPopup, signOut } from "firebase/auth"
-import { auth, googleProvider } from "../service/firebaseConfig"
-import { useEffect } from "react"
-import { useNavigate } from "react-router-dom"
-import axios from 'axios'
-export const Auth = () => {
-  const navigate = useNavigate()
+const Auth = () => {
+  const { setUser, setUserRole } = useAuth();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem("firebaseToken")
-
-    if (token) {
-      navigate("/protected")
-    }
-  }, [])
-
-  const signInWithGoogle = async () => {
+  const handleGoogleLogin = async () => {
     try {
-      const a = await signInWithPopup(auth, googleProvider)
+      const result = await signInWithPopup(auth, googleProvider);
+      const firebaseToken = await result.user.getIdToken();
 
+      const response = await axios.post('http://localhost:3001/auth/login', { firebaseToken });
 
-      let response = await axios.post('http://localhost:3001/auth/login', {
-        firebaseToken: a._tokenResponse.idToken
-      })
+      setUser(result.user);
+      setUserRole(response.data.userRole);
 
-      if (!response.data.ok) {
-        console.error(response)
-        logout()
-      } else {
-        localStorage.setItem("firebaseToken", a._tokenResponse.idToken)
-      }
-
-      navigate("/protected")
+      navigate('/');
     } catch (error) {
-      console.error(error)
+      console.error("Error al iniciar sesión con Google:", error);
     }
-  }
-
-  const logout = async () => {
-    await signOut(auth)
-
-    localStorage.removeItem("firebaseToken")
-  }
+  };
 
   return (
-    <div>
-      <h1>Auth</h1>
-      <button onClick={signInWithGoogle}>Sign in with Google</button>
-
-      <button onClick={logout}>Logout</button>
+    <div className="login-container">
+      <button onClick={handleGoogleLogin} className="btn btn-primary">Iniciar sesión con Google</button>
     </div>
-  )
-}
+  );
+};
+
+export default Auth;

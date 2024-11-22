@@ -1,83 +1,81 @@
-import React from "react"
-import CartWidget from "../CartWidget/CartWidget"
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
+import React, { useEffect } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import logo from '../../logo.png';
 import Navbar from 'react-bootstrap/Navbar';
+import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import Container from 'react-bootstrap/Container';
 import Offcanvas from 'react-bootstrap/Offcanvas';
-import { NavLink } from "react-router-dom";
-import logo from '../../logo.png'
-import '../../index.css';
+import { useAuth } from "../../context/AuthContext";
+
+const NavBar = () => {
+  const { user, userRole, loginWithGoogle, logout } = useAuth();
+  const navigate = useNavigate();
 
 
-const NavBar=()=>{
-    return (
-      
-      <>
-        {[ 'xxl' ].map((expand) => (
-             
-          <Navbar key={expand}   sticky="top" bg="light" expand={expand} className="  mb-3">
-            <Container fluid>
-              <a className="navbar-brand text-opacity-20 text-primary bg-opacity-100"  href={"/"}>
-                          <span className=" fw-bolder">Equipo 1 - ECommerce</span>
-                          <img src={logo} alt="Logo"  width="80" height="80" className=" shadow-none  opacity-100 mx-3"/>
-              </a>
-              <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
-              <Navbar.Offcanvas
-                id={`offcanvasNavbar-expand-${expand}`}
-                aria-labelledby={`offcanvasNavbarLabel-expand-${expand}`}
-                placement="end"
-              >
-              <Offcanvas.Header closeButton>
-                <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>
-                  Equipo 1 E-Commerce
-                </Offcanvas.Title>
-              </Offcanvas.Header>
-              <Offcanvas.Body>
-                <Nav className="justify-content-end flex-grow-1 pe-3">
-                  <NavLink className="inactive"  to={"/"}>Home</NavLink>
-                  <NavDropdown
-                    title="Tienda"
-                    className="drop" 
-                    id={`offcanvasNavbarDropdown-expand-${expand}`}
-                  >
-                    <NavLink className="inactive"  to={"/category/notebook"}>Notebooks</NavLink>
-                    <NavLink className="inactive" to={"/category/celular"}>Celulares</NavLink>
-                    <NavLink className="inactive"  to={"/category/tablet"}>Tablets</NavLink>
-                  </NavDropdown>
-                  <NavLink className="inactive"  to={"/Clientes"}>Clientes</NavLink>
-                  <NavLink className="inactive"  to={"/suppliers"}>Proveedores</NavLink>
-                  <NavLink className="inactive"  to={"/products"}>Productos</NavLink>
-                  <NavDropdown
-                    title="Reportes"
-                    className="drop" 
-                    id={`offcanvasNavbarDropdown-expand-${expand}`}
-                  >
-                    <NavLink className="inactive"  to={"/sales-report"}>Ventas</NavLink>
-                    <NavLink className="inactive" to={"/purchase-report"}>Compras</NavLink>
-                  </NavDropdown>
-                  <NavLink className="inactive"  to={"/contact"}>Contacto</NavLink>
-                </Nav>
-                {/* <Form className="d-flex">
-                  <Form.Control
-                    type="search"
-                    placeholder="Proximamente..."
-                    className="me-2"
-                    aria-label="Search"
-                  />
-                  <Button variant="outline-success">Search</Button>
-                </Form> */}
-              </Offcanvas.Body><CartWidget className=' rounded-5' key={expand} bg="light" expand={expand} />
-            </Navbar.Offcanvas>
-          </Container>
-        </Navbar>
-      
+  useEffect(() => {
+    if (userRole) {
+      console.log("Rol del usuario en el frontend:", userRole);
+    }
+  }, [userRole]);
+
+  const handleLogout = () => {
+    logout(); 
+    navigate("/"); 
+  };
+  
+  return (
+    <Navbar bg="light" expand="xxl" sticky="top" className="mb-3">
+      <Container fluid>
+        <NavLink to="/" className="navbar-brand text-primary">
+          <span>Equipo 1 - ECommerce</span>
+          <img src={logo} alt="Logo" width="80" height="80" className="mx-3" />
+        </NavLink>
         
-        ))}
-      
-    </>
-    
-  );
-}
+        <Navbar.Toggle aria-controls="offcanvasNavbar" />
+        
+        <Navbar.Offcanvas id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel" placement="end">
+          <Offcanvas.Header closeButton>
+            <Offcanvas.Title>Equipo 1 E-Commerce</Offcanvas.Title>
+          </Offcanvas.Header>
+          
+          <Offcanvas.Body>
+            <Nav className="justify-content-end flex-grow-1 pe-3">
+              <NavLink to="/" className="nav-link">Home</NavLink>
+              
+              <NavDropdown title="Tienda" id="offcanvasNavbarDropdown">
+                <NavLink to="/category/notebook" className="dropdown-item">Notebooks</NavLink>
+                <NavLink to="/category/celular" className="dropdown-item">Celulares</NavLink>
+                <NavLink to="/category/tablet" className="dropdown-item">Tablets</NavLink>
+              </NavDropdown>
 
-export default NavBar
+              {userRole === 'admin' ? (
+                <>
+                  <NavLink to="/clientes" className="nav-link">Clientes</NavLink>
+                  <NavLink to="/suppliers" className="nav-link">Proveedores</NavLink>
+                  <NavLink to="/products" className="nav-link">Productos</NavLink>
+                  <NavDropdown title="Reportes" id="reportDropdown">
+                    <NavLink to="/sales-report" className="dropdown-item">Ventas</NavLink>
+                    <NavLink to="/purchase-report" className="dropdown-item">Compras</NavLink>
+                  </NavDropdown>
+                </>
+              ) : (
+                <NavLink to="/cart" className="nav-link">Carrito</NavLink>
+              )}
+
+              <NavLink to="/contact" className="nav-link">Contacto</NavLink>
+
+              {user ? (
+                <button onClick={handleLogout} className="btn btn-outline-primary mx-2">Cerrar sesión</button>
+              ) : (
+                <button onClick={loginWithGoogle} className="btn btn-primary">Iniciar sesión con Google</button>
+              )}
+            </Nav>
+          </Offcanvas.Body>
+        </Navbar.Offcanvas>
+      </Container>
+    </Navbar>
+  );
+};
+
+export default NavBar;

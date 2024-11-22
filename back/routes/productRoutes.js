@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { getProducts, addProduct, deleteProduct } = require('../controllers/productController');
-const { validadorFirebase, validadorAdmin } = require('../middlewares/validadorJWT');
+const productController = require('../controllers/productController');
 
-router.get('/products', validadorFirebase, getProducts);
-
-router.post('/products', validadorFirebase, validadorAdmin, addProduct);
-router.delete('/products/:id', validadorFirebase, validadorAdmin, deleteProduct);
+// Rutas para el CRUD de productos
+router.get('/', productController.getAllProducts);
+router.get('/:id', productController.getProductById);
+router.post('/', productController.createProduct);
+router.put('/:id', productController.updateProduct);
+router.delete('/:id', productController.deleteProduct);
 
 module.exports = router;

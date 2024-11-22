@@ -1,130 +1,178 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
-import FormGroup from 'react-bootstrap/FormGroup';
-import axios from 'axios';
 
-const ProductForm = () => {
-    const { itemId } = useParams(); 
-    const [product, setProduct] = useState({
-        title: '',
-        description: '',
-        stock: 0,
-        price: 0,
-        img: ''  
-    });
-    const navigate = useNavigate();
-    const isEditMode = Boolean(itemId); 
+const ProductForm = ({ initialData = {}, onSave, onCancel }) => {
+  const [productData, setProductData] = useState({
+    name: '',
+    description: '',
+    stock: 0,
+    price: 0,
+    purchase_price: 0,
+    category: '',
+    supplier_id: '',
+    img: ''
+  });
 
-    useEffect(() => {
-        if (isEditMode) {
-            
-            axios.get(`/products/${itemId}`)
-                .then((response) => setProduct(response.data))
-                .catch((error) => console.error("Error fetching product:", error));
-        }
-    }, [itemId, isEditMode]);
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (isEditMode) {
-           
-            axios.put(`/products/${itemId}`, product)
-                .then(() => {
-                    alert("Producto actualizado con éxito");
-                    navigate('/products'); 
-                })
-                .catch((error) => console.error("Error updating product:", error));
-        } else {
-           
-            axios.post(`/products`, product)
-                .then(() => {
-                    alert("Producto agregado con éxito");
-                    navigate('/products'); 
-                })
-                .catch((error) => console.error("Error adding product:", error));
-        }
-    };
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setProduct((prevProduct) => ({
-            ...prevProduct,
-            [name]: name === 'price' || name === 'stock' ? Number(value) : value,
-        }));
-    };
-
-    if (isEditMode && !product) {
-        return <div>Loading...</div>;
+  useEffect(() => {
+    if (initialData && Object.keys(initialData).length > 0) {
+      setProductData({
+        name: initialData.name || '',
+        description: initialData.description || '',
+        stock: initialData.stock || 0,
+        price: initialData.price || 0,
+        purchase_price: initialData.purchase_price || 0,
+        category: initialData.category || '',
+        supplier_id: initialData.supplier_id || '',
+        img: initialData.img || ''
+      });
     }
+  }, [initialData]);
 
-    return (
-        <Form className='container' onSubmit={handleSubmit}>
-            <Row className='justify-content-center col-12'>
-                <FormGroup className='col-6'>
-                    <Form.Label htmlFor="title">Nombre</Form.Label>
-                    <Form.Control 
-                        type="text" 
-                        id="title" 
-                        name="title" 
-                        value={product.title} 
-                        onChange={handleChange} 
-                    />
-                </FormGroup>
-            </Row>
-            <Row className='justify-content-center'>
-                <FormGroup className='col-8'>
-                    <Form.Label htmlFor="description">Descripción</Form.Label>
-                    <Form.Control 
-                        type='text' 
-                        id="description" 
-                        name="description" 
-                        value={product.description} 
-                        onChange={handleChange} 
-                    />
-                </FormGroup>
-            </Row>
-            <Row className='justify-content-center my-3'>
-                <FormGroup className='col-4'>
-                    <Form.Label htmlFor="stock">Stock</Form.Label>
-                    <Form.Control 
-                        type="number" 
-                        id="stock" 
-                        name="stock" 
-                        value={product.stock} 
-                        onChange={handleChange} 
-                    />
-                </FormGroup>
-                <FormGroup className='col-4'>
-                    <Form.Label htmlFor="price">Precio</Form.Label>
-                    <Form.Control 
-                        type="number" 
-                        id="price" 
-                        name="price" 
-                        value={product.price} 
-                        onChange={handleChange} 
-                    />
-                </FormGroup>
-            </Row>
-            <Row className='justify-content-center'>
-                <FormGroup className='col-8'>
-                    <Form.Label htmlFor="img">Imagen (URL)</Form.Label>
-                    <Form.Control 
-                        type='text' 
-                        id="img" 
-                        name="img" 
-                        value={product.img} 
-                        onChange={handleChange} 
-                    />
-                </FormGroup>
-            </Row>
-            <Button type="submit">
-                {isEditMode ? "Guardar Cambios" : "Agregar Producto"}
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProductData((prevData) => ({
+      ...prevData,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSave(productData);
+    resetForm();
+  };
+
+  const resetForm = () => {
+    setProductData({
+      name: '',
+      description: '',
+      stock: 0,
+      price: 0,
+      purchase_price: 0,
+      category: '',
+      supplier_id: '',
+      img: ''
+    });
+    if (typeof onCancel === 'function') {
+      onCancel(); // Llama a la función onCancel para ocultar el formulario
+    }
+  };
+
+  return (
+    <Form className='my-3' onSubmit={handleSubmit}>
+      <Row className='justify-content-center'>
+        <Form.Group className="mb-3 col-4">
+          <Form.Label htmlFor="product-name">Nombre</Form.Label>
+          <Form.Control
+            type='text'
+            id="product-name"
+            name="name"
+            placeholder='Nombre'
+            value={productData.name}
+            onChange={handleChange}
+            required
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3 col-4">
+          <Form.Label htmlFor="product-description">Descripción</Form.Label>
+          <Form.Control
+            type='text'
+            id="product-description"
+            name="description"
+            placeholder='Descripción'
+            value={productData.description}
+            onChange={handleChange}
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3 col-2">
+          <Form.Label htmlFor="product-stock">Stock</Form.Label>
+          <Form.Control
+            type='number'
+            id="product-stock"
+            name="stock"
+            placeholder='Stock'
+            value={productData.stock}
+            onChange={handleChange}
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3 col-2">
+          <Form.Label htmlFor="product-price">Precio</Form.Label>
+          <Form.Control
+            type='number'
+            id="product-price"
+            name="price"
+            placeholder='Precio'
+            value={productData.price}
+            onChange={handleChange}
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3 col-4">
+          <Form.Label htmlFor="product-img">Imagen (URL)</Form.Label>
+          <Form.Control
+            type='text'
+            id="product-img"
+            name="img"
+            placeholder='URL de la imagen'
+            value={productData.img}
+            onChange={handleChange}
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3 col-3">
+          <Form.Label htmlFor="product-purchase_price">Precio de Compra</Form.Label>
+          <Form.Control
+            type='number'
+            id="product-purchase_price"
+            name="purchase_price"
+            placeholder='Precio de compra'
+            value={productData.purchase_price}
+            onChange={handleChange}
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3 col-3">
+          <Form.Label htmlFor="product-category">Categoría</Form.Label>
+          <Form.Control
+            type='text'
+            id="product-category"
+            name="category"
+            placeholder='Categoría'
+            value={productData.category}
+            onChange={handleChange}
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3 col-4">
+          <Form.Label htmlFor="product-supplier_id">ID del Proveedor</Form.Label>
+          <Form.Control
+            type='text'
+            id="product-supplier_id"
+            name="supplier_id"
+            placeholder='ID del proveedor'
+            value={productData.supplier_id}
+            onChange={handleChange}
+          />
+        </Form.Group>
+
+        <div className="d-flex justify-content-center">
+          <Button className='btn btn-success mr-2' type="submit">
+            {initialData.id ? 'Actualizar Producto' : 'Agregar Producto'}
+          </Button>
+          {initialData.id && (
+            <Button className='btn btn-danger' onClick={resetForm} type="button">
+              Cancelar
             </Button>
-        </Form>
-    );
+          )}
+        </div>
+      </Row>
+    </Form>
+  );
 };
 
 export default ProductForm;

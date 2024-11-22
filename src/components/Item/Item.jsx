@@ -43,7 +43,7 @@ const Item = ({ id, title, img, price, description, purchasePrice, showDeleteBut
 
           <div className="d-flex justify-content-between mt-2">
             {!showDeleteButton && !showEditButton && (
-              <Link to={`/item/${id}`}>
+              <Link to={`products/${id}`}>
                 <Button variant="primary">Ver más</Button>
               </Link>
             )}

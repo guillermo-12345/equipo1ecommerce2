@@ -1,26 +1,43 @@
-// src/components/SalesReport/SalesReport.jsx
 import React, { useState, useEffect } from "react";
 import ApexCharts from "apexcharts";
 import { Table, Form, Button, Row, FormSelect } from "react-bootstrap";
-import mockSalesData from "../../mockSalesData";
+import axios from "axios";
 
 const SalesReport = () => {
-  const [filteredData, setFilteredData] = useState(mockSalesData);
+  const [filteredData, setFilteredData] = useState([]);
+  const [originalData, setOriginalData] = useState([]);
   const [filters, setFilters] = useState({
     orderNumber: "",
     productName: "",
     category: "",
     startDate: "",
     endDate: "",
-    customerName: ""
+    mail: ""
   });
 
   useEffect(() => {
-    const chartData = filteredData.map((item) => ({
-      x: item.productName,
-      y: item.quantity
-    }));
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:3001/api/sales');
+        setOriginalData(response.data);
+        setFilteredData(response.data);
+      } catch (error) {
+        console.error("Error fetching sales data:", error);
+      }
+    };
+    fetchData();
+  }, []);
 
+  useEffect(() => {
+    if (!filteredData.length) return;
+  
+    const chartData = filteredData.flatMap((item) => 
+      item.items.map((product) => ({
+        x: product.title || product.id || "Producto desconocido",
+        y: product.quantity || 0
+      }))
+    );
+  
     const options = {
       chart: {
         type: "donut",
@@ -32,12 +49,13 @@ const SalesReport = () => {
         type: "category"
       }
     };
-
+  
     const chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
-
+  
     return () => chart.destroy();
   }, [filteredData]);
+  
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -48,22 +66,21 @@ const SalesReport = () => {
   };
 
   const handleClearFilters = () => {
-    setFilters({ orderNumber: "", productName: "", category: "", startDate: "", endDate: "", customerName: "" });
-    setFilteredData(mockSalesData);
-
+    setFilters({ orderNumber: "", productName: "", category: "", startDate: "", endDate: "", mail: "" });
+    setFilteredData(originalData);
   };
 
   const applyFilters = () => {
-    const filtered = mockSalesData.filter(item => {
-      const itemDate = new Date(item.date);
+    const filtered = originalData.filter(order => {
+      const itemDate = new Date(order.date);
       const startDate = filters.startDate ? new Date(filters.startDate) : null;
       const endDate = filters.endDate ? new Date(filters.endDate) : null;
 
       return (
-        (!filters.orderNumber || item.orderNumber.toString().includes(filters.orderNumber)) &&
-        (!filters.productName || item.productName.toLowerCase().includes(filters.productName.toLowerCase())) &&
-        (!filters.category || item.category.toLowerCase().includes(filters.category.toLowerCase())) &&
-        (!filters.customerName || item.customerName.toLowerCase().includes(filters.customerName.toLowerCase())) &&
+        (!filters.orderNumber || order.orderNumber.toString().includes(filters.orderNumber)) &&
+        (!filters.productName || order.items.some(item => item.title && item.title.toLowerCase().includes(filters.productName.toLowerCase()))) &&
+        (!filters.category || order.items.some(item => item.category && item.category.toLowerCase().includes(filters.category.toLowerCase()))) &&
+        (!filters.mail || order.mail.toLowerCase().includes(filters.mail.toLowerCase())) &&
         (!startDate || itemDate >= startDate) &&
         (!endDate || itemDate <= endDate)
       );
@@ -121,12 +138,12 @@ const SalesReport = () => {
               onChange={handleFilterChange}
             />
           </Form.Group>
-          <Form.Group className="col-2" controlId="customerName">
-            <Form.Label>Nombre del Cliente</Form.Label>
+          <Form.Group className="col-2" controlId="mail">
+            <Form.Label>Mail del Cliente</Form.Label>
             <Form.Control
               type="text"
-              name="customerName"
-              value={filters.customerName}
+              name="mail"
+              value={filters.mail}
               onChange={handleFilterChange}
             />
           </Form.Group>
@@ -146,15 +163,17 @@ const SalesReport = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredData.map((item) => (
-            <tr key={item.orderNumber}>
-              <td>{item.orderNumber}</td>
-              <td>{item.quantity}</td>
-              <td>{item.productName}</td>
-              <td>{item.category}</td>
-              <td>{item.date}</td>
-              <td>{item.customerName}</td>
-            </tr>
+          {filteredData.map((order) => (
+            order.items.map((product, index) => (
+              <tr key={`${order.orderNumber}-${index}`}>
+                <td>{index === 0 ? order.orderNumber : ""}</td>
+                <td>{product.quantity}</td>
+                <td>{product.title || product.id}</td>
+                <td>{product.category || "Sin categoría"}</td>
+                <td>{index === 0 ? order.date : ""}</td>
+                <td>{index === 0 ? order.mail : ""}</td>
+              </tr>
+            ))
           ))}
         </tbody>
       </Table>

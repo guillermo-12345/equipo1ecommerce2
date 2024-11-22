@@ -116,7 +116,7 @@ const EditItemForm = () => {
   
     useEffect(() => {
         if (itemId) {
-            axios.get(`/productos/${itemId}`)
+            axios.get(`/products/${itemId}`)
                 .then((response) => setProduct(response.data))
                 .catch((error) => console.error("Error fetching product:", error));
         }
@@ -127,7 +127,7 @@ const EditItemForm = () => {
         
  
         if (itemId) {
-            axios.put(`/productos/${itemId}`, product)
+            axios.put(`/products/${itemId}`, product)
                 .then(() => {
                     alert("Producto actualizado con éxito");
                     navigate('/products'); 

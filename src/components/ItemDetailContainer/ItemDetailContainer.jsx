@@ -1,49 +1,7 @@
-import { useState,useEffect } from "react";
-import  ItemDetail  from "../ItemDetail/ItemDetail";
-import { getProductById } from "../../asyncMock";
-import { useParams } from 'react-router-dom'
-import { getDoc, doc } from 'firebase/firestore'
-import { db } from '../service/firebaseConfig'
-
-const ItemDetailContainer=()=>{
-    const [product, setProduct] = useState(null)
-    const [loading, setLoading] = useState(true)
-    const {itemId}=useParams()
-
-         useEffect(() => {
-            setLoading(true)
-    
-            const docRef = doc(db, 'items', itemId)
-    
-            getDoc(docRef)
-                .then(response => {
-                    const data = response.data()
-                    const productsAdapted = { id: response.id, ...data }
-                    setProduct(productsAdapted)
-                })
-                .catch(error => {
-                    console.log(error)
-                })
-                .finally(() => {
-                    setLoading(false)
-                })
-        }, [itemId])
-
-
-    return(
-        <div className="ItemDetailContainer">
-            {loading ? <p>Cargando información del producto...</p> : <ItemDetail {...product} />}
-        </div>
-    )
-    
-} 
-
-export default ItemDetailContainer;/* 
-
 import { useState, useEffect } from "react";
 import ItemDetail from "../ItemDetail/ItemDetail";
-import { getProductById } from "../../asyncMock";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
+import axios from "../service/axiosConfig";
 
 const ItemDetailContainer = () => {
     const [product, setProduct] = useState(null);
@@ -51,25 +9,36 @@ const ItemDetailContainer = () => {
     const { itemId } = useParams();
 
     useEffect(() => {
-        setLoading(true);
-
-        getProductById(itemId)
-            .then(response => {
-                setProduct(response);
-            })
-            .catch(error => {
-                console.log(error);
-            })
-            .finally(() => {
+        const fetchProduct = async () => {
+            setLoading(true);
+            try {
+                const response = await axios.get(`/api/products/${itemId}`);
+                setProduct(response.data);
+                console.log("Product data:", response.data);
+                
+            } catch (error) {
+                console.error("Error fetching product data:", error);
+            } finally {
                 setLoading(false);
-            });
+            }
+        };
+
+        if (itemId) {
+            fetchProduct();
+        }
     }, [itemId]);
 
     return (
         <div className="ItemDetailContainer">
-            {loading ? <p>Cargando información del producto...</p> : <ItemDetail {...product} />}
+            {loading ? (
+                <p>Cargando información del producto...</p>
+            ) : product ? (
+                <ItemDetail {...product} />
+            ) : (
+                <p>Producto no encontrado.</p>
+            )}
         </div>
     );
 };
 
-export default ItemDetailContainer;*/
+export default ItemDetailContainer;

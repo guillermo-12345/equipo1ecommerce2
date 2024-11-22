@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../../src/components/service/dbConfig');
+const sequelize = require('../config/db');
 
 const Purchase = sequelize.define('Purchase', {
   supplier_id: {

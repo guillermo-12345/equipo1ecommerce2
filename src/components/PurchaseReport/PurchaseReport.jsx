@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ApexCharts from "apexcharts";
 import { Table, Form, Button, Row, FormSelect } from "react-bootstrap";
-import mockPurchaseData from "../../mockPurchaseData";
+import mockPurchaseData from "../../mockPurchaseData"; // Usa tu mock o API real si está disponible
 
 const PurchaseReport = () => {
   const [filteredData, setFilteredData] = useState(mockPurchaseData);
@@ -15,6 +15,7 @@ const PurchaseReport = () => {
   });
 
   useEffect(() => {
+    // Configuración de datos para el gráfico de barras
     const chartData = filteredData.map((item) => ({
       x: item.productName,
       y: item.quantity
@@ -23,10 +24,10 @@ const PurchaseReport = () => {
     const options = {
       chart: {
         type: "bar",
-        width: "70%",
+        height: 350
       },
       series: [{
-        name: "Quantity Purchased",
+        name: "Cantidad Comprada",
         data: chartData.map((data) => data.y)
       }],
       xaxis: {
