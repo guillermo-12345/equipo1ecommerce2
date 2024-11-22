@@ -1,5 +1,5 @@
 # Usa una imagen base de Node.js
-FROM node:14
+FROM node:14 AS build
 
 # Establece el directorio de trabajo
 WORKDIR /app
@@ -13,8 +13,17 @@ RUN npm install
 # Copia el resto de los archivos de la aplicación
 COPY . .
 
-# Expone el puerto que usa la aplicación
-EXPOSE 3000
+# Construye la aplicación
+RUN npm run build
 
-# Comando para iniciar la aplicación
-CMD ["npm", "start"]
+# Usa una imagen base de Nginx para servir los archivos estáticos
+FROM nginx:alpine
+
+# Copia los archivos construidos desde la etapa anterior
+COPY --from=build /app/build /usr/share/nginx/html
+
+# Expone el puerto que usa la aplicación
+EXPOSE 80
+
+# Comando para iniciar Nginx
+CMD ["nginx", "-g", "daemon off;"]
