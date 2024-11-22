@@ -1,7 +1,7 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db');
+const { Sequelize, DataTypes } = require('sequelize');
+const { dbConnection } = require('../config/db');
 
-const Supplier = sequelize.define('Supplier', {
+const Supplier = dbConnection.define('Supplier', {
   name: {
     type: DataTypes.STRING,
     allowNull: false,
