@@ -11,7 +11,7 @@ const Product = dbConnection.define('Product', {
     allowNull: true,
   },
   price: {
-    type: DataTypes.FLOAT,
+    type: DataTypes.DECIMAL(10, 2),
     allowNull: false,
   },
   purchasePrice: {
@@ -39,6 +39,8 @@ const Product = dbConnection.define('Product', {
       key: 'id',
     },
   },
+}, {
+  tableName: 'products'
 });
 
 module.exports = Product;

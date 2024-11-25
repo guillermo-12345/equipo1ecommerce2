@@ -1,44 +1,43 @@
-import { useState, useEffect } from "react";
-import ItemDetail from "../ItemDetail/ItemDetail";
-import { useParams } from "react-router-dom";
-import axios from "../service/axiosConfig";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import ItemDetail from './ItemDetail'; // Asegúrate de que la ruta sea correcta
 
 const ItemDetailContainer = () => {
-    const [product, setProduct] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const { itemId } = useParams();
+  const { id } = useParams(); // Obtener el ID del producto desde los parámetros de la URL
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-    useEffect(() => {
-        const fetchProduct = async () => {
-            setLoading(true);
-            try {
-                const response = await axios.get(`/api/products/${itemId}`);
-                setProduct(response.data);
-                console.log("Product data:", response.data);
-                
-            } catch (error) {
-                console.error("Error fetching product data:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
+  const fetchProduct = async () => {
+    try {
+      const response = await axios.get(`http://localhost:3001/api/products/${id}`); // Asegúrate de que esta URL sea correcta
+      setProduct(response.data);
+    } catch (error) {
+      console.error('Error fetching product data:', error);
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-        if (itemId) {
-            fetchProduct();
-        }
-    }, [itemId]);
+  useEffect(() => {
+    fetchProduct();
+  }, [id]);
 
-    return (
-        <div className="ItemDetailContainer">
-            {loading ? (
-                <p>Cargando información del producto...</p>
-            ) : product ? (
-                <ItemDetail {...product} />
-            ) : (
-                <p>Producto no encontrado.</p>
-            )}
-        </div>
-    );
+  return (
+    <div className="ItemDetailContainer">
+      {loading ? (
+        <p>Cargando información del producto...</p>
+      ) : error ? (
+        <p>Error al obtener la información del producto: {error.message}</p>
+      ) : product ? (
+        <ItemDetail {...product} />
+      ) : (
+        <p>Producto no encontrado.</p>
+      )}
+    </div>
+  );
 };
 
 export default ItemDetailContainer;
