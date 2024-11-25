@@ -1,10 +1,16 @@
 const { dbConnection } = require('../config/db');
-const Supplier = require('./Supplier');
-const Product = require('./Product');
-const Client = require('./Client');
-const Order = require('./Order');
-const OrderItem = require('./OrderItem');
-const Purchase = require('./Purchase');
+const Supplier = require('./Supplier')(dbConnection, DbConnection);
+const Product = require('./Product')(dbConnection, DbConnection);
+const Client = require('./Client')(dbConnection, DbConnection);
+const Order = require('./Order')(dbConnection, DbConnection);
+const OrderItem = require('./OrderItem')(dbConnection, DbConnection);
+const Purchase = require('./Purchase')(dbConnection, DbConnection);
+
+const dbConnection = new DbConnection(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  dialect: 'mysql'
+});
 
 // Relaciones adicionales
 OrderItem.belongsTo(Order, { foreignKey: 'orderId' });

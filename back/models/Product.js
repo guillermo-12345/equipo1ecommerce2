@@ -11,7 +11,7 @@ const Product = dbConnection.define('Product', {
     allowNull: true,
   },
   price: {
-    type: DataTypes.DECIMAL(10, 2),
+    type: DataTypes.FLOAT,
     allowNull: false,
   },
   purchasePrice: {

@@ -1,13 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-require('dotenv').config();
-const { dbConnection } = require('./config/db');
-const supplierRoutes = require('./routes/supplierRoutes');
-const productRoutes = require('./routes/productRoutes');
-const clientRoutes = require('./routes/clientRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const authRoutes = require('./routes/authRoute');
+const supplierRoutes = require('./routes/supplierRoutes'); 
+const productRoutes = require('./routes/productRoutes'); 
+const clientRoutes = require('./routes/clientRoutes'); 
+const { dbConnection } = require('./config/db');
+
 
 // Inicializar Firebase Admin
 const admin = require('./config/firebase');
@@ -40,16 +40,15 @@ app.use((err, req, res, next) => {
 });
 
 // Conectar y sincronizar la base de datos
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
+
 dbConnection.sync()
-.then(() => {
-  console.log('Base de datos sincronizada');
-  app.listen(port, () => {
-    console.log(`Servidor escuchando en el puerto ${port}`);
+  .then(() => {
+    console.log('Base de datos sincronizada');
+    app.listen(port, () => {
+      console.log(`Servidor escuchando en el puerto ${port}`);
+    });
+  })
+  .catch((error) => {
+    console.error('Error al sincronizar la base de datos:', error);
   });
-})
-.catch((error) => {
-  console.error('Error al sincronizar la base de datos:', error);
-});
-
-
