@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const orderRoutes = require('./routes/orderRoutes');
-const authRoutes = require('./routes/authRoute');
+const authRoute = require('./routes/authRoute');
 const supplierRoutes = require('./routes/supplierRoutes'); 
 const productRoutes = require('./routes/productRoutes'); 
 const clientRoutes = require('./routes/clientRoutes'); 
@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(bodyParser.json());
 
 // Rutas de autenticación
-app.use('/auth', authRoutes);
+app.use('/auth', authRoute);
 
 // Rutas CRUD
 app.use('/api/suppliers', supplierRoutes);
@@ -42,7 +42,11 @@ app.use((err, req, res, next) => {
 // Conectar y sincronizar la base de datos
 const port = process.env.PORT || 3001;
 
-dbConnection.sync()
+  dbConnection.authenticate()
+  .then(() => {
+    console.log('Conexión a la base de datos establecida correctamente.');
+    return dbConnection.sync();
+  })
   .then(() => {
     console.log('Base de datos sincronizada');
     app.listen(port, () => {

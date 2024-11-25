@@ -1,9 +1,11 @@
-const express = require("express");
-const router = express.Router();
-const verifyFirebaseToken = require("../middlewares/verifyFirebaseToken");
+const ProtectedRoute = ({ userRole, requiredRole = "user", redirectPath = "/", children }) => {
+  const navigate = useNavigate();
 
-router.get("/protected-data", verifyFirebaseToken, (req, res) => {
-  res.json({ message: "Datos protegidos", uid: req.uid });
-});
+  useEffect(() => {
+    if (!userRole || userRole !== requiredRole) {
+      navigate(redirectPath);
+    }
+  }, [userRole, requiredRole, redirectPath, navigate]);
 
-module.exports = router;
+  return children;
+};

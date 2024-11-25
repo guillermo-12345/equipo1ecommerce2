@@ -1,6 +1,4 @@
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getFirestore } from 'firebase/firestore'
+import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 
 const firebaseConfig = {
@@ -9,16 +7,13 @@ const firebaseConfig = {
   projectId: "equipo1-ecommerce",
   storageBucket: "equipo1-ecommerce.appspot.com",
   messagingSenderId: "66738131494",
-  appId: "1:66738131494:web:e199a3bbf8ca100a010ce7",
-  measurementId: "G-3B4BKNN2L6"
+  appId: "1:66738131494:web:e199a3bbf8ca100a010ce7"
 };
 
+// Inicializar Firebase solo si no está ya inicializado
+const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-export const auth = getAuth(app);
-export const googleProvider = new GoogleAuthProvider();
-const db = getFirestore(app);
+const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
 
-export { db };
-
+export { auth, googleProvider };

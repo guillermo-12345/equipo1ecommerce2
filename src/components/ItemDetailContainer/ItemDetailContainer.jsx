@@ -4,14 +4,14 @@ import { useParams } from 'react-router-dom';
 import ItemDetail from '../ItemDetail/ItemDetail'; 
 
 const ItemDetailContainer = () => {
-  const { id } = useParams(); 
+  const { itemId } = useParams(); 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const fetchProduct = async () => {
     try {
-      const response = await axios.get(`http://localhost:3001/api/products/${id}`); // Asegúrate de que esta URL sea correcta
+      const response = await axios.get(`http://localhost:3001/api/products/${itemId}`); // Asegúrate de que esta URL sea correcta
       setProduct(response.data);
     } catch (error) {
       console.error('Error fetching product data:', error);
@@ -23,7 +23,7 @@ const ItemDetailContainer = () => {
 
   useEffect(() => {
     fetchProduct();
-  }, [id]);
+  }, [itemId]);
 
   return (
     <div className="ItemDetailContainer">

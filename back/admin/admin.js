@@ -1,10 +1,13 @@
-// backend/admin.js
 const admin = require('firebase-admin');
-const serviceAccount = require('./ruta-al-archivo/equipo1-ecommerce-firebase-adminsdk-shdvj-444ab7c9db.json');
+const serviceAccount = require('../credentials/firebase-key.json');
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://equipo1-ecommerce.firebaseio.com"
-});
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
+  console.log('Firebase Admin inicializado correctamente');
+} else {
+  console.log('Firebase Admin ya estaba inicializado');
+}
 
-module.exports = { admin };
+module.exports = admin;

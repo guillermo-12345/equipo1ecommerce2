@@ -1,28 +1,19 @@
 const admin = require('firebase-admin');
 
-const verifyToken = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  if (!authHeader) {
-      console.error("Authorization header missing");
-      return res.status(403).json({ message: 'No token provided' });
-  }
-
-  const token = authHeader.split(" ")[1];
+const verifyToken = async (req, res, next) => {
+  const token = req.headers.authorization?.split(' ')[1];
   if (!token) {
-      console.error("Bearer token missing in authorization header");
-      return res.status(403).json({ message: 'Token format incorrect' });
+    return res.status(401).json({ error: 'No autorizado' });
   }
 
-  admin.auth().verifyIdToken(token)
-      .then((decodedToken) => {
-          req.user = decodedToken;
-          next();
-      })
-      .catch((error) => {
-          console.error("Token verification failed:", error);
-          res.status(403).json({ message: 'Unauthorized' });
-      });
+  try {
+    const decodedToken = await admin.auth().verifyIdToken(token);
+    req.user = decodedToken;
+    next();
+  } catch (error) {
+    console.error('Error al verificar el token:', error);
+    res.status(401).json({ error: 'No autorizado' });
+  }
 };
 
-
-module.exports = { verifyToken };
+module.exports = verifyToken;

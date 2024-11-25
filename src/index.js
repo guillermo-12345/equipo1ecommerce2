@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap';
-import { initializeApp } from "firebase/app"; 
+import { initializeApp, getApps } from "firebase/app"; 
 import { BrowserRouter } from 'react-router-dom';
 import { CartProvider } from './context/cartContext';
 
@@ -23,7 +23,9 @@ const firebaseConfig = {
 };
 
 // Inicializa Firebase solo para el cliente (frontend)
-initializeApp(firebaseConfig);
+if (!getApps().length) {
+  initializeApp(firebaseConfig);
+}
 
 // Renderizado de la aplicación React
 const rootElement = document.getElementById('root');
