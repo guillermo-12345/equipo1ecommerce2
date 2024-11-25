@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import ItemDetail from './ItemDetail'; // Asegúrate de que la ruta sea correcta
+import ItemDetail from '.../ItemDetail/ItemDetail'; 
 
 const ItemDetailContainer = () => {
-  const { id } = useParams(); // Obtener el ID del producto desde los parámetros de la URL
+  const { id } = useParams(); 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
